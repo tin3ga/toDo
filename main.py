@@ -45,10 +45,11 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+message = greet_message()
+
 
 @app.route('/')
 def home():
-    message = greet_message()
     with app.app_context():
         result = db.session.execute(db.select(Task))
         tasks = result.scalars().all()
@@ -63,6 +64,16 @@ def add_task():
             new_task = Task(task=task)
             db.session.add(new_task)
             db.session.commit()
+        return redirect(url_for('home'))
+
+
+@app.route('/delete')
+def delete_task():
+    task_id = request.args.get('task_id')
+    with app.app_context():
+        task_to_delete = db.get_or_404(Task, task_id)
+        db.session.delete(task_to_delete)
+        db.session.commit()
         return redirect(url_for('home'))
 
 

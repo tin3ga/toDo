@@ -10,6 +10,7 @@ db = SQLAlchemy()
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String, unique=True, nullable=False)
+    completed = db.Column(db.Boolean,nullable=False)
 
 
 weekday = ["Monday 😛",
@@ -61,10 +62,20 @@ def add_task():
     if request.method == 'POST':
         task = request.form.get('task')
         with app.app_context():
-            new_task = Task(task=task)
+            new_task = Task(task=task, completed=False)
             db.session.add(new_task)
             db.session.commit()
         return redirect(url_for('home'))
+
+
+@app.route("/completed",methods=['POST'])
+def task_complete():
+    task_id = request.args.get('task_id')
+    with app.app_context():
+        task = db.get_or_404(Task, task_id)
+        task.completed = True
+        db.session.commit()
+    return redirect(url_for('home'))
 
 
 @app.route('/delete')

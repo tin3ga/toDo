@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     {{ bootstrap.load_css() }}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Delicious+Handrawn&family=Young+Serif&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Delicious+Handrawn&family=Young+Serif&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>toDo</title>
 </head>
@@ -31,7 +32,7 @@
     <form action="{{ url_for('add_task', task=task) }}" method="post">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Add Task.." aria-describedby="button-addon2"
-                   name="task" autofocus>
+                   name="task" required>
             <button class="btn btn-outline-dark" type="submit" id="button-addon2">Add</button>
         </div>
     </form>
@@ -42,17 +43,34 @@
         <li class="list-group-item text-center list-group-item-info">No tasks</li>
         {% endif%}
         {% for task in tasks %}
-        <li class="list-group-item d-flex justify-content-between">{{ task.task }}<a href="{{ url_for('delete_task', task_id=task.id)}}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash3-fill"
-                 viewBox="0 0 16 16">
-                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
-            </svg>
-        </a></li>
+        <li class="list-group-item d-flex justify-content-between">
+            <div class="form-check">
+                <form action="{{ url_for('task_complete', task_id=task.id, task_completed = task.completed) }}" method="POST">
+                    {% if task.completed %}
+                    <input class="form-check-input" type="checkbox" value="{{ task.completed }}"
+                           onchange="this.form.submit()" name="checkbox" checked>
+                    <label class="form-check-label text-decoration-line-through">
+                        {{ task.task }}
+                    </label>
+                    {% else %}
+                    <input class="form-check-input" type="checkbox" value="{{ task.completed }}"
+                           onchange="this.form.submit()" name="checkbox">
+                    <label class="form-check-label">
+                        {{ task.task }}
+                    </label>
+                    {% endif %}
+                </form>
+            </div>
+            <a href="{{ url_for('delete_task', task_id=task.id)}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash3-fill"
+                     viewBox="0 0 16 16">
+                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                </svg>
+            </a></li>
         {% endfor %}
+
     </ul>
 </div>
-
-
 
 
 </body>

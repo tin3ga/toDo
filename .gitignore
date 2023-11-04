@@ -5,7 +5,6 @@ __pycache__/
 instance/
 .webassets-cache
 
-
 # Environments
 .env
 .venv

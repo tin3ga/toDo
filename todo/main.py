@@ -4,9 +4,9 @@ from flask_login import LoginManager, login_user, current_user
 from sqlalchemy import select
 from uuid import uuid4
 
-from database import engine, SessionLocal
-from models import Base, User
-import random_message
+from todo.db.database import engine, SessionLocal
+from todo.db.models import Base, User
+from todo.utils import random_message
 
 Base.metadata.create_all(bind=engine)
 

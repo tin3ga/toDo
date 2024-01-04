@@ -14,6 +14,10 @@
   transform: translate3d(0, 0, 0);
   perspective: 1000px;
 }
+.footer p {
+  font-size: small;
+  font-family: 'Young Serif',serif;
+}
 
 @keyframes shake {
   10%, 90% {
@@ -28,4 +32,5 @@
   }
   40%, 60% {
     transform: translate3d(2px, 0, 0);
+}
 }

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {{ bootstrap.load_css() }}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +46,8 @@
         {% for task in tasks %}
         <li class="list-group-item d-flex justify-content-between">
             <div class="form-check">
-                <form action="{{ url_for('task_complete', task_id=task.id, task_completed = task.completed) }}" method="POST">
+                <form action="{{ url_for('task_complete', task_id=task.id, task_completed = task.completed) }}"
+                      method="POST">
                     {% if task.completed %}
                     <input class="form-check-input" type="checkbox" value="{{ task.completed }}"
                            onchange="this.form.submit()" name="checkbox" checked>
@@ -70,8 +72,23 @@
         {% endfor %}
 
     </ul>
+
 </div>
 
+<div class="footer fixed-bottom bg-white text-dark">
+    <div class="col-md-12 text-center">
+        <p class="py-1 px-4">
+            You can view your list via the URL that was generated for it. Save this page or email the URL to
+                    yourself to get back to your list.
+        </p>
+        <p class="copyright">
+            ©
+            <script>document.write(new Date().getFullYear());</script>
+            <a href="https://github.com/tin3ga" target="_blank">tin3ga</a>. All rights reserved.
+        </p>
 
+    </div>
+</div>
+{{ bootstrap.load_js() }}
 </body>
 </html>

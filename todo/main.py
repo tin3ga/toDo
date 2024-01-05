@@ -47,7 +47,7 @@ def register_uuid():
     return redirect(url_for('home', unique_url=unique_url))
 
 
-@app.route('/<unique_url>')
+@app.route('/T<unique_url>')
 def home(unique_url):
     tasks: list = []
     with SessionLocal() as session:
@@ -55,9 +55,11 @@ def home(unique_url):
         if unique_url not in [users.user_id for users in result]:
             new_user = User(user_id=unique_url)
             session.add(new_user)
+            login_user(new_user)
             session.commit()
         else:
             user = session.query(User).filter_by(user_id=unique_url).first()
+            login_user(user)
             for todo in user.todos:
                 tasks.append(todo)
 

@@ -42,6 +42,13 @@ def register_uuid():
 
 
 @app.route('/T<unique_uuid>')
+"""
+Flask route for the home page.
+
+This route checks if the provided UUID exists in the database, 
+if not, a new user is created with this UUID and logged in.
+The user's tasks are then fetched and passed to the template.
+"""
 def home(unique_uuid):
     tasks: list = []
     with SessionLocal() as session:

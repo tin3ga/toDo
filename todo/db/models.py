@@ -26,7 +26,10 @@ class User(Base, UserMixin):
     def task_complete(self, task_id):
         with SessionLocal() as session:
             task = session.get(Todo, task_id)
-            task.completed = True
+            if task.completed == False:
+                task.completed = True
+            else:
+                task.completed = False
             session.commit()
 
     def delete_task(self, task_id):
@@ -42,5 +45,3 @@ class Todo(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id'))
     task: Mapped[str] = mapped_column(nullable=False)
     completed: Mapped[bool] = mapped_column(nullable=False)
-
-

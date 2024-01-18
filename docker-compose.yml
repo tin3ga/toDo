@@ -1,0 +1,25 @@
+services:
+  todo:
+    build: .
+    image: todo
+
+    ports:
+      - "80:5000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@todo-db:5432/postgres
+    depends_on:
+      - todo-db
+
+  todo-db:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

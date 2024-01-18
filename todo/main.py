@@ -3,10 +3,10 @@ from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager, login_user, current_user
 from sqlalchemy import select
 
-from todo.db.database import engine, SessionLocal
-from todo.db.models import Base, User
-from todo.utils import random_message
-from todo.utils.generate_uuid import generate_uuid
+from db.database import engine, SessionLocal
+from db.models import Base, User
+from utils import random_message
+from utils.generate_uuid import generate_uuid
 
 Base.metadata.create_all(bind=engine)
 

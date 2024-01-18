@@ -1,7 +1,7 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, ForeignKey
 from flask_login import UserMixin
-from todo.db.database import SessionLocal
+from db.database import SessionLocal
 
 
 class Base(DeclarativeBase):

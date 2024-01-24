@@ -6,7 +6,7 @@ services:
     ports:
       - "80:5000"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@todo-db:5432/postgres
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@todo-db:5432/postgres
     depends_on:
       - todo-db
 

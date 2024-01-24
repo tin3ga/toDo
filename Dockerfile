@@ -12,4 +12,6 @@ COPY ./todo /app/todo
 
 WORKDIR /app/todo
 
+ENV SECRET_KEY='supersecretkey'
+
 CMD ["gunicorn"  , "--bind", "0.0.0.0:5000", "main:app"]

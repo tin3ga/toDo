@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, redirect, request, url_for
 from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager, login_user, current_user
@@ -14,7 +16,7 @@ message = random_message.greet_message()
 
 app = Flask(__name__)
 bootstrap = Bootstrap5(app)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = os.environ["SECRET_KEY"]
 
 # Flask Login
 login_manager = LoginManager(app)

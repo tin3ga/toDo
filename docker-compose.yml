@@ -2,13 +2,18 @@ services:
   todo:
     build: .
     image: todo
-
     ports:
-      - "80:5000"
-    environment:
+      - "5000"
+    environment: # Add environment variables
       - DATABASE_URL=postgresql+psycopg2://postgres:postgres@todo-db:5432/postgres
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # The domain the service will respond to
+      - "traefik.http.routers.todo.rule=Host(`localhost`)"
     depends_on:
       - todo-db
+      - traefik
 
   todo-db:
     image: postgres:14
@@ -18,8 +23,21 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
-    volumes:
+    volumes: # Mount host paths or named volumes
       - pgdata:/var/lib/postgresql/data
+
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
 volumes:
   pgdata:

@@ -2,6 +2,7 @@
 
 Simple ToDo web application.
 
+![Docker Image Build](https://github.com/tin3ga/toDo/actions/workflows/docker-build.yml/badge.svg)
 ![Vercel Deploy](https://therealsujitk-vercel-badge.vercel.app/?app=todo-phi-blue)
 ![GitHub top language](https://img.shields.io/github/languages/top/tin3ga/toDo)
 ![GitHub License](https://img.shields.io/github/license/tin3ga/toDo)

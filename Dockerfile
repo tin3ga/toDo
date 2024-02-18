@@ -16,6 +16,16 @@ ENV SECRET_KEY='supersecretkey'
 
 CMD ["gunicorn"  , "--bind", "0.0.0.0:5000", "main:app"]
 
+# Test Stage
+
 FROM base as test 
 
-RUN pip install -r requirements.txt  --no-cache-dir
+COPY ./todo /app/todo
+
+WORKDIR /app/tests
+
+RUN pip install pytest --no-cache-dir
+
+COPY ./tests /app/tests
+
+CMD ["pytest"]

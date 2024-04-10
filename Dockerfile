@@ -1,4 +1,4 @@
-FROM python:alpine3.19 as base
+FROM python:3.13.0a6-alpine3.19 as base
 
 RUN pip install --upgrade pip --no-cache-dir
 

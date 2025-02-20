@@ -1,4 +1,4 @@
-FROM python:alpine3.19 as base
+FROM python:3.12-slim AS builder
 
 RUN pip install --upgrade pip --no-cache-dir
 
@@ -18,14 +18,14 @@ CMD ["gunicorn"  , "--bind", "0.0.0.0:5000", "main:app"]
 
 # Test Stage
 
-FROM base as test 
+# FROM base as test 
 
-COPY ./todo /app/todo
+# COPY ./todo /app/todo
 
-WORKDIR /app/tests
+# WORKDIR /app/tests
 
-RUN pip install pytest --no-cache-dir
+# RUN pip install pytest --no-cache-dir
 
-COPY ./tests /app/tests
+# COPY ./tests /app/tests
 
-CMD ["pytest"]
+# CMD ["pytest"]

@@ -1,43 +1,68 @@
 services:
-  todo:
-    build: .
-    image: todo
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: todo
     ports:
-      - "5000"
-    environment: # Add environment variables
-      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@todo-db:5432/postgres
+      - "5000:5000"
+
+    env_file:
+      - .env-docker
     labels:
       # Explicitly tell Traefik to expose this container
       - "traefik.enable=true"
       # The domain the service will respond to
-      - "traefik.http.routers.todo.rule=Host(`localhost`)"
-    depends_on:
-      - todo-db
+      - "traefik.http.routers.todo.rule=Host(`localhost`) || Host(`127.0.0.1`)"
+      - "traefik.http.routers.todo.entrypoints=web"
+
+    networks:
       - traefik
+      - db
+
+    depends_on:
+      todo-db:
+        condition: service_healthy
+      traefik:
+        condition: service_started
 
   todo-db:
     image: postgres:14
+    container_name: database
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     volumes: # Mount host paths or named volumes
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - db
 
   traefik:
     image: traefik:v3.0
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+    command: --configFile=/etc/traefik/traefik.yml
+
     ports:
       - "80:80"
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - ./traefik.yml:/etc/traefik/traefik.yml
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+  db:
 
 volumes:
-  pgdata:
+  postgres_data:

@@ -5,3 +5,15 @@ entryPoints:
 providers:
   docker:
     exposedByDefault: false
+
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+api:
+  dashboard: true
+  insecure: true 
+
+log:
+  level: "DEBUG" 
+  filePath: "/var/log/traefik/traefik.log"

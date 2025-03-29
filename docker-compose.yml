@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: builder
     container_name: todo
     ports:
       - "5000:5000"
@@ -15,6 +16,7 @@ services:
       # The domain the service will respond to
       - "traefik.http.routers.todo.rule=Host(`localhost`) || Host(`127.0.0.1`)"
       - "traefik.http.routers.todo.entrypoints=web"
+      - "traefik.http.services.todo.loadbalancer.server.port=5000"
 
     networks:
       - traefik
@@ -52,10 +54,11 @@ services:
 
     ports:
       - "80:80"
-      - "8080:8080"
+      - "8081:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - ./traefik.yml:/etc/traefik/traefik.yml
+      - "./logs:/var/log/traefik"
 
     networks:
       - traefik

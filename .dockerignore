@@ -2,3 +2,8 @@ __pycache__/
 */__pycache__/
 todo/vercel.json
 todo/requirements.txt
+venv/
+.pytest_cache
+.k8s/
+.tests/
+.github/

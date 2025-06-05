@@ -26,7 +26,7 @@ class User(Base, UserMixin):
     def task_complete(self, task_id):
         with SessionLocal() as session:
             task = session.get(Todo, task_id)
-            if task.completed == False:
+            if not task.completed:
                 task.completed = True
             else:
                 task.completed = False

@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: builder
+      target: development
     container_name: todo
     ports:
       - "5000:5000"
@@ -14,9 +14,9 @@ services:
       # Explicitly tell Traefik to expose this container
       - "traefik.enable=true"
       # The domain the service will respond to
-      - "traefik.http.routers.todo.rule=Host(`localhost`) || Host(`127.0.0.1`)"
-      - "traefik.http.routers.todo.entrypoints=web"
-      - "traefik.http.services.todo.loadbalancer.server.port=5000"
+      - "traefik.http.routers.web.rule=Host(`localhost`) || Host(`127.0.0.1`)"
+      - "traefik.http.routers.web.entrypoints=web"
+      - "traefik.http.services.web.loadbalancer.server.port=5000"
 
     networks:
       - traefik

@@ -16,6 +16,13 @@ spec:
       containers:
       - name: postgres
         image: postgres:15
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
         ports:
         - containerPort: 5432
           name: postgres
@@ -35,16 +42,15 @@ spec:
                 secretKeyRef:
                   name: todo-db-secret
                   key: postgres-db
-   
-
-  #       volumeMounts:
-  #       - name: www
-  #         mountPath: /usr/share/nginx/html
-  # volumeClaimTemplates:
-  # - metadata:
-  #     name: www
-  #   spec:
-  #     accessModes: [ "ReadWriteOnce" ]
-  #     resources:
-  #       requests:
-  #         storage: 1Gi
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+          failureThreshold: 6
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+  

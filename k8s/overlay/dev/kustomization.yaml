@@ -5,6 +5,21 @@ resources:
   - ../../base/app
   - ../../base/db
 
-labels:
-  - pairs:
-      env: dev
+namespace: development
+
+commonLabels:
+  env: dev
+
+secretGenerator:
+  - name: todo-app-config
+    literals:
+      - postgres-url=postgresql+psycopg://postgres:postgres@todo-db-service:5432/postgres
+      - secret_key=supersecretkey
+    type: Opaque
+
+
+
+images:
+  - name: tinegagideon/flask-todo
+    newName: tinegagideon/flask-todo
+    newTag: dev

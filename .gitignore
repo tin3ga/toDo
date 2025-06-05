@@ -15,3 +15,5 @@ venv/
 .vscode/
 *.db
 .vercel
+
+logs/

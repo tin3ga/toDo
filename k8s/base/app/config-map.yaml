@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: todo-app-config
-data:
-  postgres-url: postgresql+psycopg2://postgres:postgres@todo-db-service:5432/postgres

@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
   - todo-deployment.yaml
   - todo-service.yaml
-  - config-map.yaml

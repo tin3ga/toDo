@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment  
+metadata:
+  name: todo-app-deployment
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: init-mydb
+        image: busybox:1.28
+        command: ['sh', '-c', "until nslookup todo-db-service.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo $(date) - waiting for prod database; sleep 2; done"]

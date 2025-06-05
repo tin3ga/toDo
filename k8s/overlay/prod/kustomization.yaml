@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/app
+  - ../../base/db
+
+namespace: production
+
+commonLabels:
+  env: prod
+
+secretGenerator:
+  - name: todo-app-config
+    literals:
+      - postgres-url=postgresql+psycopg://postgres:postgres@todo-db-service:5432/postgres
+      - secret_key=supersecretkey
+    type: Opaque
+
+
+
+images:
+  - name: tinegagideon/flask-todo
+    newName: tinegagideon/flask-todo
+    newTag: dev
+
+patches:
+  - path: init-db-patch.yaml
+  # - path: service-patch.yaml
+
+#! not the most elegant way to solve the duplicate nodePort issue but did it for learning purposes
+  - target:
+      version: v1
+      kind: Service
+      name: todo-service
+    patch: |-
+      - op: replace
+        path: /spec/ports/0/nodePort
+        value: 30003
+
+

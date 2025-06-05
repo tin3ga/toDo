@@ -14,14 +14,40 @@ spec:
       labels:
         app: todo-app
     spec:
+      securityContext:
+        runAsUser: 1000
+      initContainers:
+      - name: init-mydb
+        image: busybox:1.28
+        command: ['sh', '-c', "until nslookup todo-db-service.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for todo database; sleep 2; done"]
+
       containers:
         - name: todo-app
           image: tinegagideon/flask-todo:latest
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "400m"
           ports:
             - containerPort: 5000
           env:
             - name: DATABASE_URL
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: todo-app-config
                   key: postgres-url
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: todo-app-config
+                  key: secret_key
+          imagePullPolicy: Always
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            # capabilities:
+            #   drop:
+            #     - ALL

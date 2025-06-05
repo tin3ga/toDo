@@ -26,9 +26,9 @@ RUN apk update \
 
 COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
 
-COPY ./todo ./
+WORKDIR /app/todo
 
-#ENV SECRET_KEY='supersecretkey'
+COPY ./todo ./
 
 EXPOSE 5000
 
@@ -51,19 +51,3 @@ WORKDIR /app/tests
 CMD [ "pytest"]
 
 
-# Production Stage
-
-# FROM python:${VERSION} AS production
-
-# RUN apk update \
-#     && apk upgrade \
-#     && apk add --no-cache libpq py3-gunicorn
-
-# COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
-
-# WORKDIR /app/todo 
-
-# COPY ./todo ./
-
-
-# CMD ["gunicorn"  , "--bind", "0.0.0.0:5000", "--workers", "4", "--keep-alive", "5", "main:app"]

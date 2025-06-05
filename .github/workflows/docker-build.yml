@@ -1,11 +1,17 @@
 ---
-name: Docker Image Build
+name: Docker Image Build and Push
 
 on:
   push:
     branches:
       - main
   pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: tinegagideon/flask-todo
 
 jobs:
   build-image:
@@ -47,15 +53,19 @@ jobs:
         id: docker_meta
         uses: docker/metadata-action@v5
         with:
-          images: tinegagideon/flask-todo
+          images: ${{ env.IMAGE_NAME }}
           flavor: |
             latest=false
           tags: |
             type=raw,value=latest
+            type=sha
+            type=raw,value=dev
+
 
       - name: Docker Build and Push to Docker Hub
         uses: docker/build-push-action@v5
         with:
+          target: development
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
